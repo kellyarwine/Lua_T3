@@ -1,4 +1,5 @@
-package.path = package.path .. ";./lib/?.lua;./spec/mock_in_out.lua"
+package.path = package.path .. ";./lib/?.lua;./scripts/?.lua;./spec/mock_in_out.lua"
+
 require "telescope"
 local Board = require "board"
 

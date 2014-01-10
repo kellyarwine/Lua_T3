@@ -1,4 +1,6 @@
 Board = require "board"
+messages = require "messages"
+
 Game = {}
 
 function Game:new(in_out)
@@ -14,8 +16,8 @@ function Game:setup()
 end
 
 function Game:play()
-  self.in_out:write("Welcome!")
-  self.in_out:write(self.board.size)
+  self.in_out:write(messages.welcome)
+  self.in_out:write(messages.build_board(self.board))
   move = self.in_out:read()
   self.in_out:write("This is the user's move: " .. move)
 end

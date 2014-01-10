@@ -1,6 +1,6 @@
-package.path = package.path .. ";./lib/?.lua;./spec/mock_in_out.lua"
-
 local Game = require "game"
+local inspect = require "inspect"
+local messages = require "messages"
 local Mock_In_Out = require "mock_in_out"
 require "telescope"
 
@@ -25,11 +25,18 @@ describe("Game", function()
     end)
 
     it("displays a welcome message", function()
-      assert_equal("Welcome!", game.in_out.outputs[1])
+      assert_equal(messages.welcome, game.in_out.outputs[1])
     end)
 
     it("displays the board spaces", function()
-      assert_equal(3, game.in_out.outputs[2])
+      local expected_value = "     |     |     \n" ..
+                             "  1  |  2  |  3  \n" ..
+                             "-----+-----+-----\n" ..
+                             "  4  |  5  |  6  \n" ..
+                             "-----+-----+-----\n" ..
+                             "  7  |  8  |  9  \n" ..
+                             "     |     |     \n"
+      assert_equal(expected_value, game.in_out.outputs[2])
     end)
 
     it("reads a player's move", function()
