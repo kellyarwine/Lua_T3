@@ -9,6 +9,7 @@ Messages.grid_crosshairs       = "+"
 Messages.vertical_grid_line    = "|"
 Messages.new_line              = "\n"
 Messages.welcome               = "Great.  You're here.  Ready to lose?\n"
+Messages.partial_make_move     = "Please take your next move (enter a number 1 - "
 
 function Messages.build_board(board)
   local segments = board:segment()
@@ -48,6 +49,11 @@ function Messages.build_row_border(board)
   end
 
   return table.concat(cell_border, Messages.grid_crosshairs) .. Messages.new_line
+end
+
+function Messages.make_move_prompt(board)
+  return "Please take your next move (enter a number 1 - " ..
+         #board.spaces .. "):\n"
 end
 
 return Messages
