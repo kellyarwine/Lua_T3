@@ -1,5 +1,5 @@
 Board = require "board"
-game_rules = require "game_rules"
+rules = require "rules"
 inspect = require "inspect"
 messages = require "messages"
 validations = require "validations"
@@ -20,8 +20,7 @@ function Game:setup()
 end
 
 function Game:play()
-  --TODO:  name game_rules just rules??
-  while game_rules.is_game_over(self.board) == false do
+  while rules.is_game_over(self.board) == false do
     self:display_board()
     local move = self:get_move()
     self:place_move(move)
@@ -50,8 +49,8 @@ end
 
 
 function Game:display_game_decision()
-  local decision = game_rules.get_game_decision(self.board)
-  self.in_out:write(messages.game_decision(decision))
+  local decision = rules.get_game_decision(self.board)
+  self.in_out:write(messages[decision])
 end
 
 function Game:display_play_again()
@@ -72,8 +71,6 @@ function Game:get_move()
 end
 
 function Game:place_move(move)
-  print(move)
-  print(inspect(self.board.spaces))
   self.board.spaces[move] = "x"
 end
 

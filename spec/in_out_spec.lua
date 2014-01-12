@@ -2,19 +2,25 @@ local In_Out = require "in_out"
 require "telescope"
 
 describe("In_Out", function()
+  context("new", function()
+    it("initialized an instance of in_out with a filename when it is passed in", function()
+      local in_out = In_Out:new("test.txt")
+      assert_equal("test.txt", in_out.i_o_filename)
+    end)
 
-  local contexts
+    it("initialized an instance of in_out without a filename when it is not passed in", function()
+      local in_out = In_Out:new()
+      assert_nil(in_out.i_o_filename)
+    end)
+  end)
 
-  context("write to and read from a file", function()
-    it("outputs a message and reads input", function()
-      in_out = In_Out:new("stdout.txt")
+  context("write/read", function()
+    it("outputs a message to a file and reads input from a file", function()
+      local filename = "stdout.txt"
+      local in_out = In_Out:new(filename)
       in_out:write("hi")
-      content = in_out:read()
-      assert_equal("hi", content)
-      os.remove("stdout.txt")
-      --not sure if I need these??
-      -- io.output(io.stdout)
-      -- io.input(io.stdin)
+      assert_equal("hi", in_out:read())
+      os.remove(filename)
     end)
   end)
 end)

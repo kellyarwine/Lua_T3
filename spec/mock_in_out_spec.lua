@@ -1,11 +1,19 @@
+--TODO:  possibly make getters and setters?
 local Mock_In_Out = require "mock_in_out"
 require "telescope"
 
 describe("Mock_In_Out", function()
 
   before(function()
-    local inputs = { "howdy", "hola" }
+    inputs = { "howdy", "hola" }
     mock_in_out = Mock_In_Out:new(inputs)
+  end)
+
+  context("new", function()
+    it("initializes a mock object with the inputs passed in and outputs", function()
+      assert_arrays_equal(inputs, mock_in_out.inputs)
+      assert_arrays_equal({}, mock_in_out.outputs)
+    end)
   end)
 
   context("write", function()
@@ -17,7 +25,7 @@ describe("Mock_In_Out", function()
   end)
 
   context("read", function()
-    it("returns input values from the pre-configured output values inten", function()
+    it("returns input values from the pre-configured input values passed in", function()
       assert_equal("howdy", mock_in_out:read())
       assert_equal("hola", mock_in_out:read())
     end)

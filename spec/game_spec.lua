@@ -7,14 +7,24 @@ require "telescope"
 
 describe("Game", function()
 
-  context("setup", function()
+  before(function()
+    local inputs = { "1", "2", "4", "4", "a", "100000000", "3" }
+    local mock_in_out = Mock_In_Out:new(inputs)
+    game = Game:new(mock_in_out)
+    board = Board:new(3)
+    game:play()
+  end)
 
-    before(function()
+  context("new", function()
+    it("initializes an instance of game with the in_out instance that is passed in", function()
       local mock_in_out = Mock_In_Out:new()
-      game = Game:new(mock_in_out)
+      local game = Game:new(mock_in_out)
+      assert_arrays_equal(mock_in_out, game.in_out)
     end)
+  end)
 
-    it("initializes the board", function()
+  context("setup", function()
+    it("initializes a board", function()
       assert_not_nil(game.board)
     end)
 
@@ -24,21 +34,8 @@ describe("Game", function()
   end)
 
   context("play", function()
-
-    before(function ()
-      local inputs = { "1", "2", "4", "4", "a", "100000000", "3" }
-      local mock_in_out = Mock_In_Out:new(inputs)
-      game = Game:new(mock_in_out)
-      board = Board:new(3)
-      game:play()
-    end)
-
     it("displays the gameboard", function()
-      local function build_board_from_spaces(spaces)
-        board = Board:new(3)
-        board.spaces = spaces
-        return messages.build_board(board)
-      end
+      local function build_board_from_spaces(spaces) board.spaces = spaces return messages.build_board(board) end
 
       assert_equal(build_board_from_spaces({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }), game.in_out.outputs[2])
       assert_equal(build_board_from_spaces({ "x", "2", "3", "4", "5", "6", "7", "8", "9" }), game.in_out.outputs[4])
@@ -70,6 +67,7 @@ describe("Game", function()
     end)
 
     it("loops through the game updating the gameboard with the player's move", function()
+      board = Board:new(3)
       assert_arrays_equal({ "x", "x", "x", "x", "5", "6", "7", "8", "9" }, game.board.spaces)
     end)
 
@@ -80,6 +78,5 @@ describe("Game", function()
     it("prompts the user to play again", function()
       assert_equal(messages.play_again_prompt, game.in_out.outputs[18])
     end)
-
   end)
 end)

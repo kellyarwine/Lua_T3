@@ -1,4 +1,3 @@
---TODO:  tests need to test functionality and not actual text.  Should letters be uppercase?
 local inspect = require "inspect"
 local validations = require "validations"
 
