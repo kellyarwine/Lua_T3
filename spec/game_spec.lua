@@ -26,7 +26,7 @@ describe("Game", function()
   context("play", function()
 
     before(function ()
-      local inputs = { "1", "2", "3" }
+      local inputs = { "1", "2", "4", "4", "a", "100000000", "3" }
       local mock_in_out = Mock_In_Out:new(inputs)
       game = Game:new(mock_in_out)
       board = Board:new(3)
@@ -34,15 +34,52 @@ describe("Game", function()
     end)
 
     it("displays the gameboard", function()
-      assert_equal(messages.build_board(board), game.in_out.outputs[2])
+      local function build_board_from_spaces(spaces)
+        board = Board:new(3)
+        board.spaces = spaces
+        return messages.build_board(board)
+      end
+
+      assert_equal(build_board_from_spaces({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }), game.in_out.outputs[2])
+      assert_equal(build_board_from_spaces({ "x", "2", "3", "4", "5", "6", "7", "8", "9" }), game.in_out.outputs[4])
+      assert_equal(build_board_from_spaces({ "x", "x", "3", "4", "5", "6", "7", "8", "9" }), game.in_out.outputs[6])
+      assert_equal(build_board_from_spaces({ "x", "x", "3", "x", "5", "6", "7", "8", "9" }), game.in_out.outputs[8])
+      assert_equal(build_board_from_spaces({ "x", "x", "x", "x", "5", "6", "7", "8", "9" }), game.in_out.outputs[16])
     end)
 
     it("prompts the user to make a move", function()
       assert_equal(messages.make_move_prompt(board), game.in_out.outputs[3])
+      assert_equal(messages.make_move_prompt(board), game.in_out.outputs[5])
+      assert_equal(messages.make_move_prompt(board), game.in_out.outputs[7])
+      assert_equal(messages.make_move_prompt(board), game.in_out.outputs[9])
+      assert_equal(messages.make_move_prompt(board), game.in_out.outputs[11])
+      assert_equal(messages.make_move_prompt(board), game.in_out.outputs[13])
+      assert_equal(messages.make_move_prompt(board), game.in_out.outputs[15])
     end)
 
-    it("loops through the game until there is a win updating the gameboard with the player's move", function()
-      assert_arrays_equal({ "x", "x", "x", "4", "5", "6", "7", "8", "9" }, game.board.spaces)
+    it("displays an invalid selection message when an already-occupied space is input as a move", function()
+      assert_equal(messages.invalid_selection, game.in_out.outputs[10])
     end)
+
+    it("displays an invalid selection message when a letter is input as a move", function()
+      assert_equal(messages.invalid_selection, game.in_out.outputs[12])
+    end)
+
+    it("displays an invalid selection message when a number outside of the board range is input as a move", function()
+      assert_equal(messages.invalid_selection, game.in_out.outputs[12])
+    end)
+
+    it("loops through the game updating the gameboard with the player's move", function()
+      assert_arrays_equal({ "x", "x", "x", "x", "5", "6", "7", "8", "9" }, game.board.spaces)
+    end)
+
+    it("displays a win message", function()
+      assert_equal(messages.win, game.in_out.outputs[17])
+    end)
+
+    it("prompts the user to play again", function()
+      assert_equal(messages.play_again_prompt, game.in_out.outputs[18])
+    end)
+
   end)
 end)

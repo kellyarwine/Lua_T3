@@ -2,6 +2,7 @@ Board = require "board"
 game_rules = require "game_rules"
 inspect = require "inspect"
 messages = require "messages"
+validations = require "validations"
 
 Game = {}
 
@@ -22,8 +23,7 @@ function Game:play()
   --TODO:  name game_rules just rules??
   while game_rules.is_game_over(self.board) == false do
     self:display_board()
-    self:display_make_move()
-    local move = self:make_move()
+    local move = self:get_move()
     self:place_move(move)
   end
 
@@ -40,9 +40,14 @@ function Game:display_board()
   self.in_out:write(messages.build_board(self.board))
 end
 
-function Game:display_make_move()
+function Game:prompt_for_move()
   self.in_out:write(messages.make_move_prompt(self.board))
 end
+
+function Game:display_invalid_selection()
+  self.in_out:write(messages.invalid_selection)
+end
+
 
 function Game:display_game_decision()
   local decision = game_rules.get_game_decision(self.board)
@@ -53,12 +58,22 @@ function Game:display_play_again()
   self.in_out:write(messages.play_again_prompt)
 end
 
-function Game:make_move()
+function Game:get_move()
+  self:prompt_for_move()
   --wonder if tonumber should go here?
-  return tonumber(self.in_out:read())
+  user_input = tonumber(self.in_out:read())
+
+  if not validations.is_valid_move(self.board, user_input) then
+    self:display_invalid_selection()
+    self:get_move()
+  end
+
+  return user_input
 end
 
 function Game:place_move(move)
+  print(move)
+  print(inspect(self.board.spaces))
   self.board.spaces[move] = "x"
 end
 

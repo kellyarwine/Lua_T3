@@ -8,12 +8,13 @@ messages.horizontal_grid_line  = "-"
 messages.grid_crosshairs       = "+"
 messages.vertical_grid_line    = "|"
 messages.new_line              = "\n"
-messages.welcome               = "Great.  You're here.  Ready to lose?\n"
+messages.welcome               = "Great.  You're here.  Ready to lose?\n\n"
+messages.invalid_selection     = "Yeah, that's not gonna work.  You'll have to do better than that.\n\n"
 messages.partial_make_move     = "Please take your next move (enter a number 1 - "
-messages.win                   = "Lucky chance.  You win.\n"
-messages.lose                  = "You're a loser.  I figured as much.\n"
-messages.cats                  = "This game's a tie.  But now I've got you figured out.\n"
-messages.play_again_prompt     = "Ready to go again?\n"
+messages.win                   = "Lucky chance.  You win.\n\n"
+messages.lose                  = "You're a loser.  I figured as much.\n\n"
+messages.cats                  = "This game's a tie.  But now I've got you figured out.\n\n"
+messages.play_again_prompt     = "Ready to go again?\n\n"
 
 
 function messages.build_board(board)
