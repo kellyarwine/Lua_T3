@@ -58,7 +58,7 @@ function messages.build_board(board)
   return grid_header_footer .. gameboard .. grid_header_footer
 end
 
-function messages.make_move_prompt(board)
+function messages.get_move_prompt(board)
   return "Please make your next move (enter a number 1 - " ..
          #board.spaces .. "):\n"
 end
