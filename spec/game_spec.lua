@@ -7,13 +7,13 @@ require "telescope"
 
 describe("Game", function()
 
-  before(function()
-    local inputs = { "4" }
-    local mock_in_out = Mock_In_Out:new(inputs)
-    game = Game:new(mock_in_out)
-  end)
-
   context("setup", function()
+
+    before(function()
+      local mock_in_out = Mock_In_Out:new()
+      game = Game:new(mock_in_out)
+    end)
+
     it("initializes the board", function()
       assert_not_nil(game.board)
     end)
@@ -26,6 +26,9 @@ describe("Game", function()
   context("play", function()
 
     before(function ()
+      local inputs = { "1", "2", "3" }
+      local mock_in_out = Mock_In_Out:new(inputs)
+      game = Game:new(mock_in_out)
       board = Board:new(3)
       game:play()
     end)
@@ -38,11 +41,8 @@ describe("Game", function()
       assert_equal(messages.make_move_prompt(board), game.in_out.outputs[3])
     end)
 
-    it("updates the gameboard with the player's move", function()
-      local expected_board = { "1", "2", "3", "x", "5", "6", "7", "8", "9" }
-      assert_equal("3", game.board.spaces[3])
-      assert_equal("x", game.board.spaces[4])
-      assert_equal("5", game.board.spaces[5])
+    it("loops through the game until there is a win updating the gameboard with the player's move", function()
+      assert_arrays_equal({ "x", "x", "x", "4", "5", "6", "7", "8", "9" }, game.board.spaces)
     end)
   end)
 end)

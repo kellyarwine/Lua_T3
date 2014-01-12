@@ -1,3 +1,5 @@
+--TODO:  utils need better error-handling.
+
 local utils = {}
 
 function utils.map(func, array)
