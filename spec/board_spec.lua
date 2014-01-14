@@ -48,4 +48,13 @@ describe("Board", function()
       assert_false(board:has_available_space())
     end)
   end)
+
+  context("reset board", function()
+    it("resets the board to be a new gameboard", function()
+      board.spaces = { "1", "x", "x", "x", "x", "x", "7", "8", "9" }
+      local expected_board = { "1", "2", "3", "4", "5", "6", "7", "8", "9" }
+      board:reset()
+      assert_arrays_equal(expected_board, board.spaces)
+    end)
+  end)
 end)

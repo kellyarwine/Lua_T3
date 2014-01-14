@@ -46,7 +46,7 @@ function Configurations:board_size_prompt()
   end
 end
 
-local function handle_player_2_label(self)
+local function update_player_2_label(self)
   if self.player_1.label == self.player_2.label then
     self.player_2.label = self.player_2.label .. " 2"
   end
@@ -56,7 +56,7 @@ function Configurations:configure_players()
   self:create_player(1)
   self:create_player(2, self.player_1.gamepiece)
   self.players = { self.player_1, self.player_2 }
-  handle_player_2_label(self)
+  update_player_2_label(self)
 end
 
 function Configurations:create_player(player_position, other_player_gamepiece)
@@ -81,7 +81,7 @@ end
 function Configurations:configure_turn_order()
   local turn_order = self:turn_order_prompt()
 
-  if string.upper(turn_order) ~= "PLAYER 1" then
+  if string.upper(turn_order) ~= "player 1" then
     self.players = { self.players[2], self.players[1] }
   end
 end

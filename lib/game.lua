@@ -42,7 +42,7 @@ function Game:loop()
 end
 
 function Game:display_welcome()
-  self.in_out:write(messages.welcome)
+  self.in_out:write(messages.play_game_welcome)
 end
 
 function Game:display_board()

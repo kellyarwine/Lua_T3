@@ -1,15 +1,14 @@
 require "telescope"
 local Board = require "board"
 local Hard_AI = require "hard_ai"
+local Mock_In_Out = require "mock_in_out"
 
 describe("Hard_AI", function()
 
   before(function()
     board = Board:new(3)
-    mock_in_out = {}
-    mock_gamepieces = { "k", "m" }
-    hard_ai = Hard_AI:new("k", mock_in_out, board, mock_gamepieces)
-    hard_ai.gamepieces = { "k", "m" }
+    mock_in_out = Mock_In_Out:new()
+    hard_ai = Hard_AI:new("k", mock_in_out, board)
   end)
 
   context("new", function()
@@ -77,7 +76,7 @@ describe("Hard_AI", function()
       hard_ai.board.spaces = { "k", "m", "3",
                                "4", "m", "6",
                                "7", "8", "9" }
-      assert_equal(7, hard_ai:get_move())
+      assert_equal(3, hard_ai:get_move())
     end)
 
     it("returns the best move for a board with 6 available spaces", function()
@@ -99,6 +98,13 @@ describe("Hard_AI", function()
                                "4", "5", "6",
                                "7", "8", "9" }
       assert_equal(1, hard_ai:get_move())
+    end)
+
+    it("BUG", function()
+      hard_ai.board.spaces = { "k", "k", "m",
+                               "4", "m", "6",
+                               "7", "8", "9" }
+      assert_equal(7, hard_ai:get_move())
     end)
   end)
 end)

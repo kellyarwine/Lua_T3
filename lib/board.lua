@@ -107,4 +107,8 @@ function Board:has_available_space()
   return #self:available_spaces() > 0
 end
 
+function Board:reset()
+  create_spaces(self)
+end
+
 return Board

@@ -65,7 +65,8 @@ end
 
 local messages = {}
 
-messages.welcome                      = "Great.  You're here.  Ready to lose?\n\n"
+messages.configurations_welcome       = "Great.  You're here.  Ready to lose?\n\n"
+messages.play_game_welcome            = "Game on!\n\n"
 messages.invalid_selection            = "Yeah, that's not gonna work.  You'll have to do better than that.\n"
 
 function messages.build_board(board)

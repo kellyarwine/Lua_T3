@@ -20,11 +20,11 @@ function Hard_AI:current_gamepiece()
   return self.gamepieces[1]
 end
 
-function Hard_AI:new(gamepiece, in_out, board, gamepieces)
+function Hard_AI:new(gamepiece, in_out, board)
   local o = {}
   o.gamepiece = gamepiece
+  o.in_out = in_out
   o.board = board
-  o.gamepieces = gamepieces
   o.label = "Computer"
   setmetatable(o, self)
   self.__index = self
@@ -34,9 +34,12 @@ end
 function Hard_AI:get_move()
   self.depth = 0
   self.original_available_count = #self.board:available_spaces()
+  self.gamepieces = { self.gamepiece, "." }
   scores = self:minimax()
   local max_value_position = max_value_position(scores)
-  return tonumber(self.board:available_spaces()[max_value_position])
+  local move = tonumber(self.board:available_spaces()[max_value_position])
+  self.in_out:write(move .. "\n")
+  return move
 end
 
 function Hard_AI:minimax()
@@ -57,7 +60,7 @@ end
 
 function Hard_AI:score_board()
   local scores = {}
-  self:reverse_gamepieces()
+  self:reverse_players()
 
   if rules.is_game_over(self.board) then
     return self:score_win()
@@ -67,13 +70,13 @@ function Hard_AI:score_board()
   end
 end
 
-function Hard_AI:reverse_gamepieces()
+function Hard_AI:reverse_players()
   self.gamepieces = { self.gamepieces[2], self.gamepieces[1] }
 end
 
 function Hard_AI:unwind_board(initial_space)
   self.board.spaces[tonumber(initial_space)] = initial_space
-  self:reverse_gamepieces()
+  self:reverse_players()
 end
 
 function Hard_AI:score_win()
@@ -87,9 +90,9 @@ function Hard_AI:score_win()
 end
 
 function Hard_AI:maximum_depth()
-  if self.original_available_count >= 1 and self.original_available_count <= 6 then
+  if self.original_available_count >= 1 and self.original_available_count <= 4 then
     return 5
-  elseif self.original_available_count >= 7 and self.original_available_count <= 8 then
+  elseif self.original_available_count >= 5 and self.original_available_count <= 8 then
     return 4
   else
     return 2
