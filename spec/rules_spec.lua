@@ -40,14 +40,15 @@ describe("Rules", function()
     end)
   end)
 
-  --TODO:  Flesh this out more when we have players
   context("game_decision", function()
     it("returns 'win' if the game is won", function()
       function mock_board.segment() return { {"x", "y", "x"}, {"x", "x", "x"} } end
-      assert_equal("win", rules.get_game_decision(mock_board))
+      local decision, winning_gamepiece = rules.get_game_decision(mock_board)
+      assert_equal("win", decision)
+      assert_equal("x", winning_gamepiece)
     end)
 
-    it("returns 'cats' if the game is not won", function()
+    it("returns 'cats' if no player wins", function()
       function mock_board.segment() return { {"x", "y", "x"}, {"x", "y", "x"} } end
       assert_equal("cats", rules.get_game_decision(mock_board))
     end)

@@ -18,7 +18,7 @@ end
 
 function rules.get_game_decision(board)
   if rules.winning_gamepiece(board) ~= nil then
-    return "win"
+    return "win", rules.winning_gamepiece(board)
   else
     return "cats"
   end

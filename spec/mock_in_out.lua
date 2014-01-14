@@ -1,3 +1,4 @@
+local inspect = require "inspect"
 local Mock_In_Out = {}
 
 function Mock_In_Out:new(inputs)
@@ -14,9 +15,7 @@ function Mock_In_Out:write(message)
 end
 
 function Mock_In_Out:read()
-  local input = self.inputs[1]
-  table.remove(self.inputs, 1)
-  return input
+  return table.remove(self.inputs, 1)
 end
 
 return Mock_In_Out

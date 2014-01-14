@@ -1,16 +1,17 @@
-local Human_Player = {}
+local Human = {}
 
-function Human_Player:new(gamepiece, in_out)
+function Human:new(gamepiece, in_out, board)
   local o = {}
   o.gamepiece = gamepiece
   o.in_out = in_out
+  o.label = "Human"
   setmetatable(o, self)
   self.__index = self
   return o
 end
 
-function Human_Player:get_move()
+function Human:get_move()
   return tonumber(self.in_out:read())
 end
 
-return Human_Player
+return Human

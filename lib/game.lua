@@ -1,30 +1,35 @@
-Board = require "board"
-Easy_AI_Player = require "easy_ai_player"
-Human_Player = require "human_player"
-inspect = require "inspect"
-messages = require "messages"
-rules = require "rules"
-validations = require "validations"
+local Board = require "board"
+local Easy_AI_Player = require "easy_ai_player"
+local Human_Player = require "human_player"
+local inspect = require "inspect"
+local messages = require "messages"
+local rules = require "rules"
+local validations = require "validations"
 
-Game = {}
+local Game = {}
 
-function Game:new(in_out)
-  local o = { in_out = in_out }
+local function display_game_decision(self)
+  local decision, winning_gamepiece = rules.get_game_decision(self.board)
+  self.in_out:write(messages[decision](winning_gamepiece))
+end
+
+function Game:current_player()
+  return self.players[1]
+end
+
+function Game:new(configurations)
+  local o = {}
+  self.in_out = configurations.in_out
+  self.board = configurations.board
+  self.player_1 = configurations.player_1
+  self.player_2 = configurations.player_2
+  self.players = configurations.players
   setmetatable(o, self)
   self.__index = self
-  o:setup()
   return o
 end
 
-function Game:setup()
-  self.board = Board:new(3)
-  self.player_1 = Human_Player:new("x", self.in_out)
-  self.player_2 = Human_Player:new("o", self.in_out)
-  self.players = { self.player_1, self.player_2 }
-  self:display_welcome()
-end
-
-function Game:play()
+function Game:loop()
   while rules.is_game_over(self.board) == false do
     self:display_board()
     local move = self:get_move()
@@ -33,12 +38,7 @@ function Game:play()
   end
 
   self:display_board()
-  self:display_game_decision()
-  self:display_play_again()
-end
-
-function Game:swap_current_player()
-  self.players = { self.players[2], self.players[1] }
+  display_game_decision(self)
 end
 
 function Game:display_welcome()
@@ -49,37 +49,24 @@ function Game:display_board()
   self.in_out:write(messages.build_board(self.board))
 end
 
-function Game:prompt_for_move()
-  self.in_out:write(messages.get_move_prompt(self.board))
-  return self.players[1]:get_move()
-end
-
-function Game:display_invalid_selection()
-  self.in_out:write(messages.invalid_selection)
-end
-
-function Game:display_game_decision()
-  local decision = rules.get_game_decision(self.board)
-  self.in_out:write(messages[decision])
-end
-
-function Game:display_play_again()
-  self.in_out:write(messages.play_again_prompt)
-end
-
 function Game:get_move()
-  local user_input = self:prompt_for_move()
+  self.in_out:write(messages.move_prompt(self:current_player(), self.board))
+  local user_input = self:current_player():get_move()
 
-  if not validations.is_valid_move(self.board, user_input) then
-    self:display_invalid_selection()
-    user_input = self:get_move()
+  if validations.is_invalid("move", self.board, user_input) then
+    self.in_out:write(messages.invalid_selection)
+    return self:get_move()
+  else
+    return user_input
   end
-
-  return user_input
 end
 
 function Game:place_move(move)
   self.board.spaces[move] = self.players[1].gamepiece
+end
+
+function Game:swap_current_player()
+  self.players = { self.players[2], self.players[1] }
 end
 
 return Game
