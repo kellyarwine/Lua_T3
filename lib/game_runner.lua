@@ -9,7 +9,7 @@ local function play_again_prompt(self)
   self.in_out:write(messages.play_again_prompt(validations.play_again_options))
   local user_input = string.lower(self.in_out:read())
 
-  if validations.is_invalid("play_again", user_input) then
+  if validations.is_invalid("yes_no", user_input) then
     self.in_out:write(messages.invalid_selection)
     return play_again_prompt(self)
   else
@@ -18,8 +18,27 @@ local function play_again_prompt(self)
 end
 
 local function same_configurations_prompt(self)
-  self.in_out:write("Same settings as before?")
+  self.in_out:write(messages.same_configurations_prompt)
   local user_input = string.lower(self.in_out:read())
+
+  if validations.is_invalid("yes_no", user_input) then
+    self.in_out:write(messages.invalid_selection)
+    return play_again_prompt(self)
+  else
+    return user_input
+  end
+end
+
+local function loop_number_prompt(self)
+  self.in_out:write(messages.loop_number_prompt)
+  local user_input = tonumber(self.in_out:read())
+
+  -- if validations.is_invalid("play_again", user_input) then
+  --   self.in_out:write(messages.invalid_selection)
+  --   return play_again_prompt(self)
+  -- else
+    return user_input
+  -- end
 end
 
 
@@ -42,9 +61,13 @@ end
 function Game_Runner:play_game()
   self.game:loop()
 
-  if play_again_prompt(self) == "yes" and same_configurations_prompt(self) == "y" then
-    self.board:reset_spaces()
-    self:play_game()
+  if play_again_prompt(self) == "yes"
+    and same_configurations_prompt(self) == "yes" then
+
+    for i = 1, loop_number_prompt(self) do
+      self.game.board:reset()
+      self.game:loop()
+    end
   else
     self:configure_game()
     self:play_game()

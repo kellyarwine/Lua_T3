@@ -3,9 +3,9 @@ local inspect = require "inspect"
 local validation_functions = {}
 local validations = {}
 
-validations.player_types = { "human", "easy ai", "hard ai" }
-validations.turn_order_options = { "player 1", "player 2" }
-validations.play_again_options = { "no", "yes" }
+validations.player_options = { "human", "easy ai", "hard ai", "easy", "hard" }
+validations.turn_order_options = { "player 1", "player 2", "1", "2" }
+validations.yes_no_options = { "no", "yes", "y", "n" }
 validations.minimum_board_size = 3
 validations.maximum_board_size = 10
 
@@ -32,26 +32,14 @@ local function in_board_range(board, user_input)
   return user_input >= 1 and user_input <= #board.spaces
 end
 
-function validation_functions.play_again(user_input)
-  for _, play_again_option in ipairs(validations.play_again_options) do
-    if play_again_option == user_input then return true end
-  end
-end
-
-function validation_functions.player(user_input)
+function validation_functions.choice(available_options, user_input)
   if user_input == nil then return false end
 
-  for _, player_type in ipairs(validations.player_types) do
-    if player_type == user_input then return true end
+  for _, available_option in ipairs(validations[available_options]) do
+    if user_input == available_option then return true end
   end
 
   return false
-end
-
-function validation_functions.turn_order(user_input)
-  for _, turn_order_option in ipairs(validations.turn_order_options) do
-    if turn_order_option == user_input then return true end
-  end
 end
 
 function validation_functions.board_size(user_input)

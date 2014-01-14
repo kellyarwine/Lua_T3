@@ -68,6 +68,8 @@ local messages = {}
 messages.configurations_welcome       = "Great.  You're here.  Ready to lose?\n\n"
 messages.play_game_welcome            = "Game on!\n\n"
 messages.invalid_selection            = "Yeah, that's not gonna work.  You'll have to do better than that.\n"
+messages.same_configurations_prompt   = "Same configurations as before?\n"
+messages.loop_number_prompt           = "You can play multiple games in a row.\n(This is useful for pitting the AI players against each other.)\nHow many games would you like to play?"
 
 function messages.build_board(board)
   local segments = board:segment_rows()

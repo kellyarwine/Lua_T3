@@ -104,7 +104,6 @@ describe("Hard_AI", function()
       hard_ai.board.spaces = { "1", "2", "3",
                                "4", "5", "6",
                                "7", "8", "9" }
-      print(hard_ai:get_move())
       assert_equal(1, hard_ai:get_move())
     end)
 
