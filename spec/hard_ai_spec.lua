@@ -89,8 +89,8 @@ describe("Hard_AI", function()
 
     it("returns the best move for a board with 8 available spaces", function()
       hard_ai.board.spaces = { "m", "2", "3",
-                               "4", "5","6",
-                               "7","8","9" }
+                               "4", "5", "6",
+                               "7", "8", "9" }
       assert_equal(5, hard_ai:get_move())
     end)
 
