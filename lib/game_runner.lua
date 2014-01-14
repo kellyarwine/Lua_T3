@@ -34,7 +34,6 @@ function Game_Runner:configure_game()
 end
 
 function Game_Runner:play_game()
-  self.game:setup()
   self.game:loop()
 
   if play_again_prompt(self) == "yes" then

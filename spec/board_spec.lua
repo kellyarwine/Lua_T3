@@ -26,6 +26,18 @@ describe("Board", function()
     end)
   end)
 
+  context("available_spaces", function()
+    it("returns empty spaces on the gameboard", function()
+      board.spaces = { "1", "x", "x", "x", "x", "x", "7", "8", "9" }
+      assert_arrays_equal({ "1", "7", "8", "9" }, board:available_spaces())
+    end)
+
+    it("returns false if the board is full", function()
+      board.spaces = { "x", "x", "x", "x" }
+      assert_false(board:has_available_space())
+    end)
+  end)
+
   context("has_available_space", function()
     it("returns true if the board has empty spaces", function()
       assert_true(board:has_available_space())

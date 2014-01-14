@@ -15,6 +15,10 @@ describe("Human", function()
       assert_equal("x", human.gamepiece)
       assert_equal(mock_in_out, human.in_out)
     end)
+
+    it("initializes a human with a label", function()
+      assert_equal("Human", human.label)
+    end)
   end)
 
   context("get_move", function()

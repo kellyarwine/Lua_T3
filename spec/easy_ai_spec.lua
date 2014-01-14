@@ -15,6 +15,10 @@ describe("Easy_AI", function()
       assert_equal("x", easy_ai.gamepiece)
       assert_equal(mock_board, easy_ai.board)
     end)
+
+    it("initializes an instance of easy_ai with a label", function()
+      assert_equal("Computer", easy_ai.label)
+    end)
   end)
 
   context("get_move", function()

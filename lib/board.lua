@@ -1,4 +1,5 @@
 local Board = {}
+local inspect = require "inspect"
 
 local function create_spaces(self)
   self.spaces = {}
@@ -92,10 +93,18 @@ function Board:segment_rows()
   return segments
 end
 
+function Board:available_spaces()
+  available_spaces = {}
+
+  for _, space in ipairs(self.spaces) do
+    if string.find(space, "^%d") then table.insert(available_spaces, space) end
+  end
+
+  return available_spaces
+end
+
 function Board:has_available_space()
-  local spaces_string = table.concat(self.spaces)
-  local open_space = '%d'
-  return string.find(spaces_string, open_space) ~= nil
+  return #self:available_spaces() > 0
 end
 
 return Board
