@@ -23,12 +23,12 @@ describe("Hard_AI", function()
   end)
 
   context("get_move", function()
-    it("returns the best move for a board with 2 available spaces", function()
-      hard_ai.board.spaces = { "m", "k", "m",
-                               "m", "k", "m",
-                               "7", "8", "k" }
-      assert_equal(8, hard_ai:get_move())
-    end)
+    -- it("returns the best move for a board with 2 available spaces", function()
+    --   hard_ai.board.spaces = { "m", "k", "m",
+    --                            "m", "k", "m",
+    --                            "7", "8", "k" }
+    --   assert_equal(8, hard_ai:get_move())
+    -- end)
 
     it("returns the best move for a board with 3 available spaces", function()
       hard_ai.board.spaces = { "1", "m", "k",
@@ -39,7 +39,7 @@ describe("Hard_AI", function()
 
     it("returns the best move for a board with 3 available spaces", function()
       hard_ai.board.spaces = { "k", "m", "k",
-                               "m", "k", "m",
+                               "k", "m", "k",
                                "7", "8", "9" }
       assert_equal(7, hard_ai:get_move())
     end)
@@ -76,7 +76,7 @@ describe("Hard_AI", function()
       hard_ai.board.spaces = { "k", "m", "3",
                                "4", "m", "6",
                                "7", "8", "9" }
-      assert_equal(3, hard_ai:get_move())
+      assert_equal(8, hard_ai:get_move())
     end)
 
     it("returns the best move for a board with 6 available spaces", function()
@@ -93,19 +93,21 @@ describe("Hard_AI", function()
       assert_equal(5, hard_ai:get_move())
     end)
 
+    it("BUG", function()
+      hard_ai.board.spaces = { "k", "k", "m",
+                               "4", "m", "k",
+                               "7", "8", "m" }
+      assert_equal(7, hard_ai:get_move())
+    end)
+
     it("returns the best move for a board with 9 available spaces", function()
       hard_ai.board.spaces = { "1", "2", "3",
                                "4", "5", "6",
                                "7", "8", "9" }
+      print(hard_ai:get_move())
       assert_equal(1, hard_ai:get_move())
     end)
 
-    it("BUG", function()
-      hard_ai.board.spaces = { "k", "k", "m",
-                               "4", "m", "6",
-                               "7", "8", "9" }
-      assert_equal(7, hard_ai:get_move())
-    end)
   end)
 end)
 
