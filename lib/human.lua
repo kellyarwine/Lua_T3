@@ -1,5 +1,10 @@
 local Human = {}
 
+function Human:get_move()
+  local move = tonumber(self.in_out:read())
+  return move
+end
+
 function Human:new(gamepiece, in_out, board)
   local o = {}
   o.gamepiece = gamepiece
@@ -8,10 +13,6 @@ function Human:new(gamepiece, in_out, board)
   setmetatable(o, self)
   self.__index = self
   return o
-end
-
-function Human:get_move()
-  return tonumber(self.in_out:read())
 end
 
 return Human

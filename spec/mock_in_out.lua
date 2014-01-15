@@ -1,5 +1,12 @@
-local inspect = require "inspect"
 local Mock_In_Out = {}
+
+function Mock_In_Out:write(message)
+  table.insert(self.outputs, message)
+end
+
+function Mock_In_Out:read()
+  return table.remove(self.inputs, 1)
+end
 
 function Mock_In_Out:new(inputs)
   local o = {}
@@ -8,14 +15,6 @@ function Mock_In_Out:new(inputs)
   setmetatable(o, self)
   self.__index = self
   return o
-end
-
-function Mock_In_Out:write(message)
-  table.insert(self.outputs, message)
-end
-
-function Mock_In_Out:read()
-  return table.remove(self.inputs, 1)
 end
 
 return Mock_In_Out

@@ -52,8 +52,7 @@ end
 function Game:get_move()
   self.in_out:write(messages.move_prompt(self:current_player(), self.board))
   local user_input = self:current_player():get_move()
-
-  if validations.is_invalid("move", self.board, user_input) then
+  if validations.is_invalid(user_input, { "move", self.board.spaces } ) then
     self.in_out:write(messages.invalid_selection)
     return self:get_move()
   else

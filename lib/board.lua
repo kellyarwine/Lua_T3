@@ -1,6 +1,3 @@
-local Board = {}
-local inspect = require "inspect"
-
 local function create_spaces(self)
   self.spaces = {}
   for i = 1, self.size^2 do
@@ -9,54 +6,81 @@ local function create_spaces(self)
 end
 
 local function segment_columns(self)
-  local segments = {}
+  local columns = {}
 
   for i = 1, self.size do
-    local segment = {}
+    local column = {}
 
     for j = 1, self.size do
       incrementer = (j - 1) * self.size
       next_index = i + incrementer
-      segment[j] = self.spaces[next_index]
+      column[j] = self.spaces[next_index]
     end
 
-    table.insert(segments, segment)
+    table.insert(columns, column)
   end
 
-  return segments
+  return columns
 end
 
 local function segment_left_diagonal(self)
-  local segment = {}
+  local left_diagonal = {}
 
   for j = 1, self.size do
     incrementer = (j - 1) * (self.size + 1)
     next_index = 1 + incrementer
-    segment[j] = self.spaces[next_index]
+    left_diagonal[j] = self.spaces[next_index]
   end
 
-  return { segment }
+  return { left_diagonal }
 end
 
 local function segment_right_diagonal(self)
-  local segment = {}
+  local right_diagonal = {}
 
   for j = 1, self.size do
     incrementer = (j - 1) * (self.size - 1)
     next_index = self.size + incrementer
-    segment[j] = self.spaces[next_index]
+    right_diagonal[j] = self.spaces[next_index]
   end
 
-  return { segment }
+  return { right_diagonal }
 end
 
-function Board:new(size)
-  local o = {}
-  o.size = size
-  setmetatable(o, self)
-  self.__index = self
-  o.board = create_spaces(o)
-  return o
+
+
+local Board = {}
+
+function Board:reset()
+  create_spaces(self)
+end
+
+function Board:available_spaces()
+  available_spaces = {}
+
+  for _, space in ipairs(self.spaces) do
+    if string.find(space, "^%d") then table.insert(available_spaces, space) end
+  end
+
+  return available_spaces
+end
+
+function Board:segment_rows()
+  local rows = {}
+
+  for i = 1, self.size do
+    local row = {}
+
+    for j = 1, self.size do
+      incrementer = (i - 1) * self.size
+      next_index = j + incrementer
+      row[j] = self.spaces[next_index]
+    end
+
+    table.insert(rows, row)
+  end
+
+  return rows
 end
 
 function Board:segment()
@@ -75,40 +99,13 @@ function Board:segment()
   return segments
 end
 
-function Board:segment_rows()
-  local segments = {}
-
-  for i = 1, self.size do
-    local segment = {}
-
-    for j = 1, self.size do
-      incrementer = (i - 1) * self.size
-      next_index = j + incrementer
-      segment[j] = self.spaces[next_index]
-    end
-
-    table.insert(segments, segment)
-  end
-
-  return segments
-end
-
-function Board:available_spaces()
-  available_spaces = {}
-
-  for _, space in ipairs(self.spaces) do
-    if string.find(space, "^%d") then table.insert(available_spaces, space) end
-  end
-
-  return available_spaces
-end
-
-function Board:has_available_space()
-  return #self:available_spaces() > 0
-end
-
-function Board:reset()
-  create_spaces(self)
+function Board:new(size)
+  local o = {}
+  o.size = size
+  setmetatable(o, self)
+  self.__index = self
+  create_spaces(o)
+  return o
 end
 
 return Board

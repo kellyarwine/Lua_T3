@@ -1,5 +1,3 @@
-inspect = require "inspect"
-
 local function read_input(self)
   if self.input_filename ~= nil and self.input_filename ~= "none" then
     opened_file = io.input(self.input_filename)
@@ -14,14 +12,6 @@ local function read_input(self)
 end
 
 local In_Out = {}
-
-function In_Out:new(input_filename, output_filename)
-  local o = { input_filename = input_filename, output_filename = output_filename } or {}
-  setmetatable(o, self)
-  self.__index = self
-  read_input(o)
-  return o
-end
 
 function In_Out:write(message)
   if self.output_filename then
@@ -39,6 +29,14 @@ function In_Out:read()
   else
     return io.read()
   end
+end
+
+function In_Out:new(input_filename, output_filename)
+  local o = { input_filename = input_filename, output_filename = output_filename } or {}
+  setmetatable(o, self)
+  self.__index = self
+  read_input(o)
+  return o
 end
 
 return In_Out

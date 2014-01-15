@@ -1,4 +1,3 @@
-local inspect = require "inspect"
 local messages = require "messages"
 
 describe("messages", function()
@@ -48,7 +47,7 @@ describe("messages", function()
 
   context("board_size_prompt", function()
     it("instructs the player to enter a board size, displaying the minimum and maximum values that can be input", function()
-      assert_equal("Choose the size of the gameboard (enter a number 10 - 100):\n", messages.board_size_prompt(10, 100))
+      assert_equal("Choose the size of the gameboard (enter a number 10 - 100):\n", messages.board_size_prompt({ 10, 100 }))
     end)
   end)
 
@@ -76,6 +75,19 @@ describe("messages", function()
     end)
   end)
 
+  context("same_configurations_prompt", function()
+    it("instructs the player to choose whether or not they want to use the same configurations to play another game", function()
+      assert_equal("Same configurations as before? (Enter 'No' or 'Yes'.)\n", messages.same_configurations_prompt({ "No", "Yes" }))
+    end)
+  end)
+
+  context("loop_number_prompt", function()
+    it("instructs the player to choose how many times they want to repeat the game loop without stopping", function()
+      assert_equal("How many games would you like to play? (Enter any number 1 - 2000.)\n", messages.loop_number_prompt({ 1, 2000 }))
+    end)
+  end)
+
+
   context("win", function()
     it("notifies the player of the win and displays the winning gamepiece", function()
       assert_equal("x wins.  Whoop.Dee.Do.\n\n", messages.win("x"))
@@ -84,7 +96,7 @@ describe("messages", function()
 
   context("cats", function()
     it("notifies the player of a tie game", function()
-      assert_equal("This game's a tie.  Better luck next time.\n\n", messages.cats("x"))
+      assert_equal("Cats game.  Better luck next time.\n\n", messages.cats("x"))
     end)
   end)
 end)

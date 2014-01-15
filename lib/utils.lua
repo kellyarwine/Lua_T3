@@ -1,13 +1,13 @@
 local utils = {}
 
-function utils.map(func, array)
+function utils.map(func, table_name)
   if type(func) ~= "function" then error("function expected") end
-  if type(array) ~= "table" then error("table expected") end
+  if type(table_name) ~= "table" then error("table expected") end
 
   local result = {}
 
-  for i = 1, #array do
-    result[i] = func(array[i])
+  for i = 1, #table_name do
+    result[i] = func(table_name[i])
   end
 
   return result

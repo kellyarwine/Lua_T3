@@ -1,6 +1,6 @@
-require "telescope"
 local Human = require "human"
 local Mock_In_Out = require "mock_in_out"
+require "telescope"
 
 describe("Human", function()
 
@@ -11,7 +11,7 @@ describe("Human", function()
   end)
 
   context("new", function()
-    it("initializes a human with an in_out and a gamepiece", function()
+    it("initializes a human with an in_out and a gamepiece (the board object is not used)", function()
       assert_equal("x", human.gamepiece)
       assert_equal(mock_in_out, human.in_out)
     end)

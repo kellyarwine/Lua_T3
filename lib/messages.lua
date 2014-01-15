@@ -1,20 +1,22 @@
-local inspect = require "inspect"
 local utils = require "utils"
 
-local cell_width                      = 5
-local cell_padding_symbol             = " "
-local horizontal_grid_line            = "-"
-local grid_crosshairs                 = "+"
-local vertical_grid_line              = "|"
-local new_line                        = "\n"
-local partial_make_move               = "%s, make your move (enter a number 1 - %d):\n"
-local partial_board_size_prompt       = "Choose the size of the gameboard (enter a number %d - %d):\n"
-local partial_player_selection_prompt = "Choose Player %d's player type (enter '%s'):\n"
-local partial_turn_order_prompt       = "Choose which player goes first (enter '%s'):\n"
-local partial_play_again_prompt       = "Ready to go again? (Enter '%s'.)\n"
-local partial_gamepiece_prompt        = "Choose any single letter to be the gamepiece for Player %d:\n"
-local partial_win                     = "%s wins.  Whoop.Dee.Do.\n\n"
-local cats                            = "This game's a tie.  Better luck next time.\n\n"
+local cell_width                         = 5
+local cell_padding_symbol                = " "
+local horizontal_grid_line               = "-"
+local grid_crosshairs                    = "+"
+local vertical_grid_line                 = "|"
+local new_line                           = "\n"
+local partial_make_move                  = "%s, make your move (enter a number 1 - %d):\n"
+local partial_board_size_prompt          = "Choose the size of the gameboard (enter a number %d - %d):\n"
+local partial_player_selection_prompt    = "Choose Player %d's player type (enter '%s'):\n"
+local partial_turn_order_prompt          = "Choose which player goes first (enter '%s'):\n"
+local partial_play_again_prompt          = "Ready to go again? (Enter '%s'.)\n"
+local partial_same_configurations        = "Same configurations as before? (Enter '%s'.)\n"
+local partial_gamepiece_prompt           = "Choose any single letter to be the gamepiece for Player %d:\n"
+local partial_same_configurations_prompt = "Same configurations as before? (Enter '%s'.)\n"
+local partial_loop_number_prompt         = "How many games would you like to play? (Enter any number %d - %d.)\n"
+local partial_win                        = "%s wins.  Whoop.Dee.Do.\n\n"
+local cats                               = "Cats game.  Better luck next time.\n\n"
 
 local function cell_padding(cell_value, type)
   local cell_padding_amt = cell_width - #cell_value
@@ -63,13 +65,31 @@ local function build_row_border(board)
   return table.concat(cell_border, grid_crosshairs) .. new_line
 end
 
+
+
 local messages = {}
 
 messages.configurations_welcome       = "Great.  You're here.  Ready to lose?\n\n"
 messages.play_game_welcome            = "Game on!\n\n"
 messages.invalid_selection            = "Yeah, that's not gonna work.  You'll have to do better than that.\n"
-messages.same_configurations_prompt   = "Same configurations as before?\n"
-messages.loop_number_prompt           = "You can play multiple games in a row.\n(This is useful for pitting the AI players against each other.)\nHow many games would you like to play?"
+
+function messages.play_again_prompt(yes_no_options)
+  local inspect = require "inspect"
+  local yes_no_options_string = table.concat(yes_no_options, "' or '")
+  return string.format(partial_play_again_prompt, yes_no_options_string)
+end
+
+function messages.cats()
+  return cats
+end
+
+function messages.win(winning_gamepiece)
+  return string.format(partial_win, winning_gamepiece)
+end
+
+function messages.move_prompt(player, board)
+  return string.format(partial_make_move, player.label, #board.spaces)
+end
 
 function messages.build_board(board)
   local segments = board:segment_rows()
@@ -80,40 +100,31 @@ function messages.build_board(board)
   return grid_header_footer .. gameboard .. grid_header_footer .. new_line
 end
 
-function messages.move_prompt(player, board)
-  return string.format(partial_make_move, player.label, #board.spaces)
-end
-
-function messages.board_size_prompt(minimumu_board_size, maximum_board_size)
-  return string.format(partial_board_size_prompt, minimumu_board_size, maximum_board_size)
-end
-
-function messages.player_selection_prompt(available_player_types, player_order)
-  player_types_string = table.concat(available_player_types, "' or '")
-  return string.format(partial_player_selection_prompt, player_order, player_types_string)
+function messages.turn_order_prompt(turn_order_options)
+  local turn_order_options_string = table.concat(turn_order_options, "' or '")
+  return string.format(partial_turn_order_prompt, turn_order_options_string)
 end
 
 function messages.gamepiece_prompt(player_order)
   return string.format(partial_gamepiece_prompt, player_order)
 end
 
-
-function messages.turn_order_prompt(turn_order_options)
-  local turn_orders_string = table.concat(turn_order_options, "' or '")
-  return string.format(partial_turn_order_prompt, turn_orders_string)
+function messages.player_selection_prompt(player_options, player_order)
+  player_options_string = table.concat(player_options, "' or '")
+  return string.format(partial_player_selection_prompt, player_order, player_options_string)
 end
 
-function messages.play_again_prompt(play_again_options)
-  local play_again_options_string = table.concat(play_again_options, "' or '")
-  return string.format(partial_play_again_prompt, play_again_options_string)
+function messages.board_size_prompt(board_range)
+  return string.format(partial_board_size_prompt, board_range[1], board_range[2])
 end
 
-function messages.win(winning_gamepiece)
-  return string.format(partial_win, winning_gamepiece)
+function messages.same_configurations_prompt(yes_no_options)
+  local yes_no_options_string = table.concat(yes_no_options, "' or '")
+  return string.format(partial_same_configurations_prompt, yes_no_options_string)
 end
 
-function messages.cats()
-  return cats
+function messages.loop_number_prompt(range)
+  return string.format(partial_loop_number_prompt, range[1], range[2])
 end
 
 return messages
