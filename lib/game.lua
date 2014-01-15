@@ -1,20 +1,53 @@
-local Board = require "board"
-local Easy_AI_Player = require "easy_ai_player"
-local Human_Player = require "human_player"
-local inspect = require "inspect"
 local messages = require "messages"
 local rules = require "rules"
 local validations = require "validations"
 
-local Game = {}
+
+local function swap_current_player(self)
+  self.players = { self.players[2], self.players[1] }
+end
+
+local function current_player(self)
+  return self.players[1]
+end
 
 local function display_game_decision(self)
   local decision, winning_gamepiece = rules.get_game_decision(self.board)
   self.in_out:write(messages[decision](winning_gamepiece))
 end
 
-function Game:current_player()
-  return self.players[1]
+local function display_board(self)
+  self.in_out:write(messages.build_board(self.board))
+end
+
+local function place_move(self, move)
+  self.board.spaces[move] = self.players[1].gamepiece
+end
+
+local function get_move(self)
+  self.in_out:write(messages.move_prompt(current_player(self), self.board))
+  local user_input = current_player(self):get_move()
+  if validations.is_invalid(user_input, { "move", self.board.spaces } ) then
+    self.in_out:write(messages.invalid_selection)
+    return get_move(self)
+  else
+    return user_input
+  end
+end
+
+
+local Game = {}
+
+function Game:loop()
+  while rules.is_game_over(self.board) == false do
+    display_board(self)
+    local move = get_move(self)
+    place_move(self, move)
+    swap_current_player(self)
+  end
+
+  display_board(self)
+  display_game_decision(self)
 end
 
 function Game:new(configurations)
@@ -27,45 +60,6 @@ function Game:new(configurations)
   setmetatable(o, self)
   self.__index = self
   return o
-end
-
-function Game:loop()
-  while rules.is_game_over(self.board) == false do
-    self:display_board()
-    local move = self:get_move()
-    self:place_move(move)
-    self:swap_current_player()
-  end
-
-  self:display_board()
-  display_game_decision(self)
-end
-
-function Game:display_welcome()
-  self.in_out:write(messages.play_game_welcome)
-end
-
-function Game:display_board()
-  self.in_out:write(messages.build_board(self.board))
-end
-
-function Game:get_move()
-  self.in_out:write(messages.move_prompt(self:current_player(), self.board))
-  local user_input = self:current_player():get_move()
-  if validations.is_invalid(user_input, { "move", self.board.spaces } ) then
-    self.in_out:write(messages.invalid_selection)
-    return self:get_move()
-  else
-    return user_input
-  end
-end
-
-function Game:place_move(move)
-  self.board.spaces[move] = self.players[1].gamepiece
-end
-
-function Game:swap_current_player()
-  self.players = { self.players[2], self.players[1] }
 end
 
 return Game

@@ -1,10 +1,8 @@
 local Configurations = require "configurations"
 local Game = require "game"
-local inspect = require "inspect"
 local messages = require "messages"
 local Prompter = require "prompter"
 local validations = require "validations"
-
 
 local function play_again_prompt(self)
   local prompt_message = messages.play_again_prompt(validations.yes_no_options)

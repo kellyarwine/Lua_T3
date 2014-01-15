@@ -1,5 +1,4 @@
 local Board = require "board"
-local inspect = require "inspect"
 local messages = require "messages"
 local validations = require "validations"
 

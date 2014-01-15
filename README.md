@@ -1,15 +1,12 @@
-mess around with assert match
+Welcome to T3!
 
+This game was programmed in Lua 5.2.2.  To run the game you'll need to have Lua installed.  I had trouble using Homebrew to install the latest version.  Some people reported using this command 'brew install lua52' and getting it to work.  I downloaded from here (http://www.lua.org/download.html)
 
-At the end---------------------
-go back and check global namespace
-go back and check for local variables
-check for random comments
-see test coverage
-update readme
-run game on mike's computer after fresh install
-get rid of inspect's
+To run the game, 'cd' into the directory and type
+'lua t3.lua'
 
+To run the specs, you'll need to 'install' the telescope library.  To do this, simply type
+'make install'
 
 Input/Output to File
 

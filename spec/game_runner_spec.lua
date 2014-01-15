@@ -1,11 +1,10 @@
 local Game_Runner = require "game_runner"
-local inspect = require "inspect"
 local messages = require "messages"
 local Mock_In_Out = require "mock_in_out"
 local validations = require "validations"
 require "telescope"
 
-describe("Game_Runner", function()
+describe("Game_Runner/Integration", function()
   before(function()
     board_size_prompt = messages.board_size_prompt(validations.board_range)
     p1_gamepiece_prompt = messages.gamepiece_prompt(1)
@@ -120,109 +119,106 @@ describe("Game_Runner", function()
     end)
   end)
 
-  context("integration tests", function()
-    context("configures and plays a game only one time through", function()
-      before(function()
-        local inputs = { "3", "Human", "m", "Human", "k", "player 1", "1", "2", "4", "5", "7", "NO" }
-        local mock_in_out = Mock_In_Out:new(inputs)
-        game_runner = Game_Runner:new(mock_in_out)
-        game_runner:configure_game()
-        game_runner:play_game()
-        outputs = game_runner.in_out.outputs
-        p1_move_prompt = messages.move_prompt(game_runner.game.player_1, game_runner.game.board)
-        p2_move_prompt = messages.move_prompt(game_runner.game.player_2, game_runner.game.board)
-        final_gameboard = messages.build_board(game_runner.game.board)
-        game_decision = messages.win(game_runner.game.player_1.gamepiece)
-        play_again_prompt = messages.play_again_prompt(validations.yes_no_options)
-      end)
-
-      it("configures the game", function()
-        assert_equal(messages.configurations_welcome, outputs[1])
-        assert_equal(board_size_prompt, outputs[2])
-        assert_equal(p1_selection_prompt, outputs[3])
-        assert_equal(p1_gamepiece_prompt, outputs[4])
-        assert_equal(p2_selection_prompt, outputs[5])
-        assert_equal(p2_gamepiece_prompt, outputs[6])
-        assert_equal(turn_order_prompt, outputs[7])
-      end)
-
-      it("plays the game", function()
-        for i = 9, 17, 4 do
-          assert_equal(p1_move_prompt, outputs[i])
-        end
-
-        for i = 11, 15, 4 do
-          assert_equal(p2_move_prompt, outputs[i])
-        end
-        assert_equal(final_gameboard, outputs[18])
-        assert_equal(game_decision, outputs[19])
-        assert_equal(play_again_prompt, outputs[20])
-      end)
-
-      it("saves all of the console output in memory", function()
-        assert_equal(20, #outputs)
-      end)
+  context("configures and plays a game only one time through", function()
+    before(function()
+      local inputs = { "3", "Human", "m", "Human", "k", "player 1", "1", "2", "4", "5", "7", "NO" }
+      local mock_in_out = Mock_In_Out:new(inputs)
+      game_runner = Game_Runner:new(mock_in_out)
+      game_runner:configure_game()
+      game_runner:play_game()
+      outputs = game_runner.in_out.outputs
+      p1_move_prompt = messages.move_prompt(game_runner.game.player_1, game_runner.game.board)
+      p2_move_prompt = messages.move_prompt(game_runner.game.player_2, game_runner.game.board)
+      final_gameboard = messages.build_board(game_runner.game.board)
+      game_decision = messages.win(game_runner.game.player_1.gamepiece)
+      play_again_prompt = messages.play_again_prompt(validations.yes_no_options)
     end)
 
-    context("configures and plays a game twice, choosing to play again a second time with the same configurations", function()
-      before(function()
-        local inputs = { "3", "hard ai", "m", "hard ai", "k", "player 1", "yes", "yes", "1" }
-        local mock_in_out = Mock_In_Out:new(inputs)
-        game_runner = Game_Runner:new(mock_in_out)
-        game_runner:configure_game()
-        game_runner:play_game()
-        outputs = game_runner.in_out.outputs
-        p1_move_prompt = messages.move_prompt(game_runner.game.player_1, game_runner.game.board)
-        p2_move_prompt = messages.move_prompt(game_runner.game.player_2, game_runner.game.board)
-        final_gameboard = messages.build_board(game_runner.game.board)
-        game_decision = messages.cats(game_runner.game.player_1.gamepiece)
-        play_again_prompt = messages.play_again_prompt(validations.yes_no_options)
-        same_configurations_prompt = messages.same_configurations_prompt(validations.yes_no_options)
-        loop_number_prompt = messages.loop_number_prompt(validations.game_loop_range)
-      end)
+    it("configures the game", function()
+      assert_equal(messages.configurations_welcome, outputs[1])
+      assert_equal(board_size_prompt, outputs[2])
+      assert_equal(p1_selection_prompt, outputs[3])
+      assert_equal(p1_gamepiece_prompt, outputs[4])
+      assert_equal(p2_selection_prompt, outputs[5])
+      assert_equal(p2_gamepiece_prompt, outputs[6])
+      assert_equal(turn_order_prompt, outputs[7])
+    end)
 
-      it("configures the game", function()
-        assert_equal(messages.configurations_welcome, outputs[1])
-        assert_equal(board_size_prompt, outputs[2])
-        assert_equal(p1_selection_prompt, outputs[3])
-        assert_equal(p1_gamepiece_prompt, outputs[4])
-        assert_equal(p2_selection_prompt, outputs[5])
-        assert_equal(p2_gamepiece_prompt, outputs[6])
-        assert_equal(turn_order_prompt, outputs[7])
-      end)
+    it("plays the game", function()
+      for i = 9, 17, 4 do
+        assert_equal(p1_move_prompt, outputs[i])
+      end
 
-      it("plays the first game", function()
-        for i = 9, 33, 6 do
-          assert_equal(p1_move_prompt, outputs[i])
-        end
+      for i = 11, 15, 4 do
+        assert_equal(p2_move_prompt, outputs[i])
+      end
+      assert_equal(final_gameboard, outputs[18])
+      assert_equal(game_decision, outputs[19])
+      assert_equal(play_again_prompt, outputs[20])
+    end)
 
-        for i = 12, 30, 6 do
-          assert_equal(p2_move_prompt, outputs[i])
-        end
+    it("saves all of the console output in memory", function()
+      assert_equal(20, #outputs)
+    end)
+  end)
 
-        assert_equal(game_decision, outputs[36])
-        assert_equal(play_again_prompt, outputs[37])
-        assert_equal(same_configurations_prompt, outputs[38])
-        assert_equal(loop_number_prompt, outputs[39])
-      end)
+  context("configures and plays a game twice, choosing to play again a second time with the same configurations", function()
+    before(function()
+      local inputs = { "3", "hard ai", "m", "hard ai", "k", "player 1", "yes", "yes", "1" }
+      local mock_in_out = Mock_In_Out:new(inputs)
+      game_runner = Game_Runner:new(mock_in_out)
+      game_runner:configure_game()
+      game_runner:play_game()
+      outputs = game_runner.in_out.outputs
+      p1_move_prompt = messages.move_prompt(game_runner.game.player_1, game_runner.game.board)
+      p2_move_prompt = messages.move_prompt(game_runner.game.player_2, game_runner.game.board)
+      final_gameboard = messages.build_board(game_runner.game.board)
+      game_decision = messages.cats(game_runner.game.player_1.gamepiece)
+      play_again_prompt = messages.play_again_prompt(validations.yes_no_options)
+      same_configurations_prompt = messages.same_configurations_prompt(validations.yes_no_options)
+      loop_number_prompt = messages.loop_number_prompt(validations.game_loop_range)
+    end)
 
-      it("plays the second game", function()
-        for i = 44, 62, 6 do
-          assert_equal(p1_move_prompt, outputs[i])
-        end
+    it("configures the game", function()
+      assert_equal(messages.configurations_welcome, outputs[1])
+      assert_equal(board_size_prompt, outputs[2])
+      assert_equal(p1_selection_prompt, outputs[3])
+      assert_equal(p1_gamepiece_prompt, outputs[4])
+      assert_equal(p2_selection_prompt, outputs[5])
+      assert_equal(p2_gamepiece_prompt, outputs[6])
+      assert_equal(turn_order_prompt, outputs[7])
+    end)
 
-        for i = 41, 65, 6 do
-          assert_equal(p2_move_prompt, outputs[i])
-        end
+    it("plays the first game", function()
+      for i = 9, 33, 6 do
+        assert_equal(p1_move_prompt, outputs[i])
+      end
 
-        assert_equal(final_gameboard, outputs[67])
-        assert_equal(game_decision, outputs[68])
-      end)
+      for i = 12, 30, 6 do
+        assert_equal(p2_move_prompt, outputs[i])
+      end
 
-      it("saves all of the console output in memory", function()
-        print(#outputs)
-        assert_equal(68, #outputs)
-      end)
+      assert_equal(game_decision, outputs[36])
+      assert_equal(play_again_prompt, outputs[37])
+      assert_equal(same_configurations_prompt, outputs[38])
+      assert_equal(loop_number_prompt, outputs[39])
+    end)
+
+    it("plays the second game", function()
+      for i = 44, 62, 6 do
+        assert_equal(p1_move_prompt, outputs[i])
+      end
+
+      for i = 41, 65, 6 do
+        assert_equal(p2_move_prompt, outputs[i])
+      end
+
+      assert_equal(final_gameboard, outputs[67])
+      assert_equal(game_decision, outputs[68])
+    end)
+
+    it("saves all of the console output in memory", function()
+      assert_equal(68, #outputs)
     end)
   end)
 end)

@@ -74,7 +74,6 @@ messages.play_game_welcome            = "Game on!\n\n"
 messages.invalid_selection            = "Yeah, that's not gonna work.  You'll have to do better than that.\n"
 
 function messages.play_again_prompt(yes_no_options)
-  local inspect = require "inspect"
   local yes_no_options_string = table.concat(yes_no_options, "' or '")
   return string.format(partial_play_again_prompt, yes_no_options_string)
 end

@@ -1,4 +1,3 @@
-local inspect = require "inspect"
 local function is_character(user_input)
   local character_pattern = '%a'
   return string.find(user_input, character_pattern) ~= nil
