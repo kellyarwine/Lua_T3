@@ -1,3 +1,0 @@
-[submodule "scripts/telescope"]
-	path = scripts/telescope
-	url = git@github.com:kellystee/telescope.git
