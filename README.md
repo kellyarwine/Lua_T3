@@ -1,11 +1,14 @@
 #Welcome to T3!
 
 ##Installing Lua
-This game was programmed in Lua 5.2.2.  To run the game you'll need to have Lua installed.  I had trouble using Homebrew to install the latest version of Lua.  Some people reported using this command and getting it to work:
+This game was programmed in Lua 5.2.2.  To run the game you'll need to have Lua installed.
 
-    brew install lua52
-
-I downloaded Lua from [here](http://www.lua.org/download.html)
+Open Terminal and run the following commands:
+    wget http://www.lua.org/download.html/ftp/lua-5.2.3.tar.gz
+    tar xvzf lua-5.2.3.tar.gz
+    cd lua-5.2.3/src
+    run make macosx
+    sudo cp lua /usr/bin/lua
 
 ##Running the Game
 To run the game, 'cd' into the T3 directory and type:
