@@ -4,6 +4,7 @@
 This game was programmed in Lua 5.2.2.  To run the game you'll need to have Lua installed.
 
 Open Terminal and run the following commands:
+
     wget http://www.lua.org/download.html/ftp/lua-5.2.3.tar.gz
     tar xvzf lua-5.2.3.tar.gz
     cd lua-5.2.3/src
