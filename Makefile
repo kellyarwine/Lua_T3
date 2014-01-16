@@ -7,9 +7,9 @@ test:
 
 install:
 	@mkdir -p $(LUA_SHARE)/telescope
-	cp scripts/telescope.lua $(LUA_SHARE)
-	cp scripts/telescope/compat_env.lua $(LUA_SHARE)/telescope
-	cp scripts/tsc $(LUA_DIR)/bin
+	cp scripts/telescope/telescope.lua $(LUA_SHARE)
+	cp scripts/telescope/telescope/compat_env.lua $(LUA_SHARE)/telescope
+	cp scripts/telescope/tsc $(LUA_DIR)/bin
 
 play:
 	lua t3.lua
