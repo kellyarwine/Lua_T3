@@ -3,13 +3,37 @@
 ##Installing Lua
 This game was programmed in Lua 5.2.2.  To run the game you'll need to have Lua installed.
 
+
+###The Easy Way to Install Lua
+* Download Lua [here](http://www.lua.org/download.html).
+* Double click the file to "unzip".
+
+Then open Terminal and run the following commands:
+
+    cd lua-5.2.3/src
+    make macosx
+    sudo cp lua /usr/bin/lua
+    lua
+
+You'll know you have Lua correctly installed if, when you type the last command above, you get this:
+
+    Lua 5.2.2  Copyright (C) 1994-2013 Lua.org, PUC-Rio
+    >
+
+###The Easier Way to Install Lua
 Open Terminal and run the following commands:
 
     wget http://www.lua.org/download.html/ftp/lua-5.2.3.tar.gz
     tar xvzf lua-5.2.3.tar.gz
     cd lua-5.2.3/src
-    run make macosx
+    make macosx
     sudo cp lua /usr/bin/lua
+    lua
+
+You'll know you have Lua correctly installed if, when you type the last command above, you get this:
+
+    Lua 5.2.2  Copyright (C) 1994-2013 Lua.org, PUC-Rio
+    >
 
 ##Running the Game
 To run the game, 'cd' into the T3 directory and type:
